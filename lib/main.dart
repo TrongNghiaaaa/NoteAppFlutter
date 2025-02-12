@@ -12,15 +12,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Notes App',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus
+          ?.unfocus(), // ẩn bàn phím khi click ra ngoài
+      child: GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Notes App',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        initialRoute: Routes.onboarding,
+        getPages: AppPage.pages,
       ),
-      initialRoute: Routes.onboarding,
-      getPages: AppPage.pages,
     );
   }
 }

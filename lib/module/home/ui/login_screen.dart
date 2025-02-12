@@ -3,8 +3,8 @@ import 'package:flutter_gap/flutter_gap.dart';
 import 'package:get/get.dart';
 import 'package:note_app/core/config/routes.dart';
 import 'package:note_app/core/constant/app_colors.dart';
-import 'package:note_app/module/home/register_screen.dart';
-import 'package:note_app/module/home/widget/forgot_password.dart';
+import 'package:note_app/core/constant/common_regex.dart';
+import 'package:note_app/module/home/widget/text_form_field_widget.dart';
 import 'package:note_app/module/locator/login_controller.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -13,7 +13,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final LoginController loginController = Get.put(LoginController());
-    final TextEditingController emailController = TextEditingController();
+    final TextEditingController phoneController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
 
     return Scaffold(
@@ -41,47 +41,40 @@ class LoginScreen extends StatelessWidget {
                   color: AppColors.textColorDarkGrey,
                 ),
               ),
-              const Gap(32),
-              const Text(
-                "Địa chỉ email",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-              ),
+
               const Gap(12),
-              TextFormField(
-                controller: emailController,
-                decoration: InputDecoration(
-                  hintText: 'Johndoe@gmail.com',
-                  hintStyle: const TextStyle(
-                      color: AppColors.textColorBaseGrey,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: const BorderSide(color: Colors.grey),
-                  ),
-                  contentPadding: const EdgeInsets.all(16),
-                ),
+              TextFormFieldWidget(
+                hintText: '0xxxxxxxxx',
+                labelText: "Số điện thoại",
+                keyboardType: TextInputType.phone,
+                controller: phoneController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Vui lòng nhập số điện thoại';
+                  }
+                  if (!CommonRegex.phoneRegExp.hasMatch(value)) {
+                    return 'Số điện thoại không hợp lệ';
+                  }
+                  return null;
+                },
               ),
-              const Gap(32),
-              const Text(
-                "Mật khẩu",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-              ),
-              const Gap(12),
-              TextFormField(
+
+              TextFormFieldWidget(
+                hintText: "********",
+                labelText: "Mật khẩu",
                 obscureText: true,
                 controller: passwordController,
-                decoration: InputDecoration(
-                  hintText: '********',
-                  hintStyle:
-                      const TextStyle(color: AppColors.textColorBaseGrey),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: const BorderSide(color: Colors.grey),
-                  ),
-                  contentPadding: const EdgeInsets.all(16),
-                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Vui lòng nhập mật khẩu';
+                  }
+                  if (!CommonRegex.passRegExp.hasMatch(value)) {
+                    return 'Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt';
+                  }
+                  return null;
+                },
               ),
+
               const Gap(12),
               TextButton(
                 onPressed: () {
@@ -108,7 +101,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    String username = emailController.text.trim();
+                    String username = phoneController.text.trim();
                     String password = passwordController.text.trim();
                     if (username.isNotEmpty && password.isNotEmpty) {
                       loginController.login(username, password);
