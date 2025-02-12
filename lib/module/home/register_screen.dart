@@ -32,22 +32,64 @@ class RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController referralPhoneController = TextEditingController();
 
   String? gender; // Giới tính (1: Nam, 2: Nữ)
+  String appBarTitle = "Quay lại đăng nhập"; // Tiêu đề mặc định
+  final ScrollController _scrollController = ScrollController();
+  bool showRegisterTitle = false; // Trạng thái hiển thị tiêu đề "Đăng ký"
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    RenderBox? registerTextBox =
+        registerTextKey.currentContext?.findRenderObject() as RenderBox?;
+    if (registerTextBox != null) {
+      double textPosition = registerTextBox.localToGlobal(Offset.zero).dy;
+      if (textPosition <= kToolbarHeight) {
+        if (!showRegisterTitle) {
+          setState(() => showRegisterTitle = true);
+        }
+      } else {
+        if (showRegisterTitle) {
+          setState(() => showRegisterTitle = false);
+        }
+      }
+    }
+  }
+
+  final GlobalKey registerTextKey = GlobalKey(); // Key cho text "Đăng ký"
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: AppColors.white,
-        iconTheme: const IconThemeData(color: AppColors.primarybase),
-        title: const Text('Quay lại đăng nhập'),
+        backgroundColor: AppColors.primarybase,
+        iconTheme: const IconThemeData(color: AppColors.white),
+        title:
+            Text(showRegisterTitle ? "Đăng ký  " : "Quay lại trang đăng nhập",
+                style: const TextStyle(
+                  color: AppColors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                )),
+        centerTitle: true,
         titleTextStyle: const TextStyle(
-          color: AppColors.primarybase,
+          color: AppColors.white,
           fontSize: 16,
           fontWeight: FontWeight.w500,
         ),
       ),
       body: SingleChildScrollView(
+        controller: _scrollController,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           child: Form(
@@ -55,12 +97,14 @@ class RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   "Đăng ký",
-                  style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.black),
+                  key: registerTextKey, // Gán key cho Text "Đăng ký"
+                  style: const TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.black,
+                  ),
                 ),
                 const Gap(16),
                 TextFormFieldWidget(
@@ -87,8 +131,21 @@ class RegisterScreenState extends State<RegisterScreen> {
                   },
                 ),
                 const Gap(12),
+                const Text(
+                  "Giới tính",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                ),
+                const Gap(12),
                 DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(labelText: "Giới tính"),
+                  hint: const Text("Chọn giới tính",
+                      style: TextStyle(color: AppColors.textColorBaseGrey)),
+                  iconEnabledColor: AppColors.primarybase,
+                  iconDisabledColor: AppColors.black,
+                  dropdownColor: AppColors.white,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                  )),
                   value: gender,
                   items: const [
                     DropdownMenuItem(value: '1', child: Text("Nam")),
