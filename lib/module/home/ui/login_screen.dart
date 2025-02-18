@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:note_app/core/config/routes.dart';
 import 'package:note_app/core/constant/app_colors.dart';
 import 'package:note_app/core/constant/common_regex.dart';
+import 'package:note_app/module/home/authencation/login_controller.dart';
 import 'package:note_app/module/home/widget/text_form_field_widget.dart';
 import 'package:note_app/module/locator/login_controller.dart';
 
@@ -41,7 +43,6 @@ class LoginScreen extends StatelessWidget {
                   color: AppColors.textColorDarkGrey,
                 ),
               ),
-
               const Gap(12),
               TextFormFieldWidget(
                 hintText: '0xxxxxxxxx',
@@ -58,7 +59,6 @@ class LoginScreen extends StatelessWidget {
                   return null;
                 },
               ),
-
               TextFormFieldWidget(
                 hintText: "********",
                 labelText: "Mật khẩu",
@@ -74,7 +74,6 @@ class LoginScreen extends StatelessWidget {
                   return null;
                 },
               ),
-
               const Gap(12),
               TextButton(
                 onPressed: () {
@@ -148,8 +147,11 @@ class LoginScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 50,
                 child: OutlinedButton.icon(
-                  onPressed: () {
-                    Get.toNamed('/home');
+                  onPressed: () async {
+                    UserCredential? userCredential = await signInWithGoogle();
+                    if (userCredential != null) {
+                      Get.toNamed(Routes.appbar);
+                    }
                   },
                   icon: Image.asset(
                     'assets/images/icon_gg.png',

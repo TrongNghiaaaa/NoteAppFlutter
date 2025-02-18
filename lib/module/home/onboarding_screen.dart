@@ -16,25 +16,25 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   int _currentIndex = 0;
-  bool _autoPlay = true;
-  // Để kiểm soát autoPlay
+  bool _autoPlay = true; // Kiểm soát tự động chuyển slide
 
   final List<Map<String, String>> onboardingData = [
     {
       "image": "assets/images/logo_1.png",
-      "text": "Jot Down anything you want to achieve, today or in the future",
-      "buttonText": "Let's Get Started",
+      "text":
+          "Ghi lại bất cứ điều gì bạn muốn đạt được, hôm nay hoặc trong tương lai",
+      "buttonText": "Bắt đầu ngay",
     },
     {
       "image": "assets/images/logo_2.png",
-      "text": "Different goals, different way to jot it down.",
-      "buttonText": "Next",
+      "text": "Mục tiêu khác nhau, cách ghi chú cũng khác nhau.",
+      "buttonText": "Tiếp theo",
     },
     {
       "image": "assets/images/logo_3.png",
       "text":
-          "Text area, checklist, or some combination. Adapt with your needs",
-      "buttonText": "Proceed to Login",
+          "Ghi chú văn bản, danh sách kiểm tra hoặc kết hợp cả hai. Linh hoạt theo nhu cầu của bạn!",
+      "buttonText": "Tiến đến đăng nhập",
     },
   ];
 
@@ -116,7 +116,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             });
                           },
                           child: const Text(
-                            'Previous',
+                            'Quay lại',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
@@ -135,7 +135,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     setState(() {
                       _currentIndex = index;
                       if (_currentIndex == onboardingData.length - 1) {
-                        _autoPlay = false; // Dừng autoplay khi đến phần tử cuối
+                        _autoPlay =
+                            false; // Dừng tự động chạy khi đến slide cuối
                       }
                     });
                   },

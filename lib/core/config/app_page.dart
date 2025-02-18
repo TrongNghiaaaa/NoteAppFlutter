@@ -5,6 +5,7 @@ import 'package:note_app/module/home/onboarding_screen.dart';
 import 'package:note_app/module/home/register_screen.dart';
 import 'package:note_app/module/home/ui/login_screen.dart';
 import 'package:note_app/module/home/widget/forgot_password.dart';
+import 'package:note_app/module/home/ui/bottom_appbar_widget.dart';
 
 class AppPage {
   static List<GetPage> pages = [
@@ -15,6 +16,10 @@ class AppPage {
     GetPage(
       name: Routes.login,
       page: () => const LoginScreen(),
+    ),
+    GetPage(
+      name: Routes.appbar,
+      page: () => const BottomAppBarWidget(),
     ),
     GetPage(
       name: Routes.register,
