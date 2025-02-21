@@ -1,16 +1,27 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:note_app/common/common_loading.dart';
 
 Future<UserCredential?> signInWithGoogle() async {
   try {
+    // Hiển thị loading trước khi thực hiện các thao tác dài
+    Get.dialog(
+      const CommonLoading(), // Hiển thị loading ngay từ đầu
+      barrierDismissible: false, // Không thể thoát khi đang loading
+    );
+
     // Đăng xuất Firebase và Google Sign-In trước khi đăng nhập
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
 
     // Hiển thị hộp thoại đăng nhập Google và yêu cầu chọn tài khoản
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    if (googleUser == null) return null; // Người dùng hủy đăng nhập
+    if (googleUser == null) {
+      // Đóng loading nếu người dùng hủy
+      Get.back();
+      return null; // Người dùng hủy đăng nhập
+    }
 
     // Lấy thông tin xác thực từ Google
     final GoogleSignInAuthentication googleAuth =
@@ -21,8 +32,16 @@ Future<UserCredential?> signInWithGoogle() async {
     );
 
     // Đăng nhập Firebase bằng Google
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+
+    // Đóng loading sau khi đăng nhập thành công
+    Get.back();
+
+    return userCredential;
   } catch (error) {
+    // Đóng loading nếu có lỗi
+    Get.back();
     print("Lỗi đăng nhập Google: $error");
     Get.snackbar('Lỗi', 'Đăng nhập Google thất bại!');
     return null;

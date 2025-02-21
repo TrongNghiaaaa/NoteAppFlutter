@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:note_app/core/config/app_page.dart';
 import 'package:note_app/core/config/routes.dart';
-import 'firebase_options.dart'; // Import FirebaseOptions
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform, // Sử dụng FirebaseOptions
+    options: DefaultFirebaseOptions.currentPlatform,
   );
 
   runApp(const MyApp());

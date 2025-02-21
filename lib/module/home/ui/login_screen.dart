@@ -6,15 +6,16 @@ import 'package:note_app/core/config/routes.dart';
 import 'package:note_app/core/constant/app_colors.dart';
 import 'package:note_app/core/constant/common_regex.dart';
 import 'package:note_app/module/home/authencation/login_controller.dart';
+import 'package:note_app/module/home/authencation/login_phone_number_controller.dart';
 import 'package:note_app/module/home/widget/text_form_field_widget.dart';
-import 'package:note_app/module/locator/login_controller.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final LoginController loginController = Get.put(LoginController());
+    final LoginPhoneNumberController loginPhoneNumberController =
+        Get.put(LoginPhoneNumberController());
     final TextEditingController phoneController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
 
@@ -59,6 +60,7 @@ class LoginScreen extends StatelessWidget {
                   return null;
                 },
               ),
+              const Gap(12),
               TextFormFieldWidget(
                 hintText: "********",
                 labelText: "Mật khẩu",
@@ -92,37 +94,33 @@ class LoginScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.purple,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+                child: Obx(() {
+                  return ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.purple,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0)),
                     ),
-                  ),
-                  onPressed: () {
-                    String username = phoneController.text.trim();
-                    String password = passwordController.text.trim();
-                    if (username.isNotEmpty && password.isNotEmpty) {
-                      loginController.login(username, password);
-                    } else {
-                      Get.snackbar(
-                          'Lỗi', 'Vui lòng nhập tên đăng nhập và mật khẩu');
-                    }
-                  },
-                  child: Obx(() {
-                    return loginController.isLoading.value
-                        ? const CircularProgressIndicator(
-                            color: Colors.white,
-                          )
+                    onPressed: loginPhoneNumberController.isLoading.value
+                        ? null // Nếu đang loading, disable button
+                        : () {
+                            loginPhoneNumberController.loginAndNavigate(
+                              phone: phoneController.text.trim(),
+                              password: passwordController.text.trim(),
+                              context: context,
+                            );
+                          },
+                    child: loginPhoneNumberController.isLoading.value
+                        ? const CircularProgressIndicator(color: Colors.white)
                         : const Text(
                             'Đăng nhập',
                             style: TextStyle(
                                 color: AppColors.white,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500),
-                          );
-                  }),
-                ),
+                          ),
+                  );
+                }),
               ),
               const Gap(16),
               const Row(
@@ -149,6 +147,7 @@ class LoginScreen extends StatelessWidget {
                 child: OutlinedButton.icon(
                   onPressed: () async {
                     UserCredential? userCredential = await signInWithGoogle();
+
                     if (userCredential != null) {
                       Get.toNamed(Routes.appbar);
                     }
