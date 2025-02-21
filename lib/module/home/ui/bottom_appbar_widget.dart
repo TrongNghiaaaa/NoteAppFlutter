@@ -3,19 +3,20 @@ import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:note_app/core/constant/app_colors.dart';
 import 'package:note_app/module/home/ui/finished_screen.dart';
+import 'package:note_app/module/home/ui/home_screen.dart';
 import 'package:note_app/module/home/ui/search_screen.dart';
 import 'package:note_app/module/home/ui/setting_screen.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-  static const String routeName = '/home';
+class BottomAppBarWidget extends StatefulWidget {
+  const BottomAppBarWidget({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<BottomAppBarWidget> createState() => _BottomAppBarState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _BottomAppBarState extends State<BottomAppBarWidget> {
   int _currentIndex = 0;
+  final PageController _pageController = PageController();
 
   final List<Widget> _pages = [
     const HomeScreen(),
@@ -25,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   void _onItemTapped(int index) {
+    _pageController.jumpToPage(index); // Giữ trạng thái trang
     setState(() {
       _currentIndex = index;
     });
@@ -34,8 +36,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundColorHomescr,
-      body: IndexedStack(
-        index: _currentIndex,
+      body: PageView(
+        controller: _pageController,
+        physics: const NeverScrollableScrollPhysics(), // Không cho vuốt ngang
         children: _pages,
       ),
       bottomNavigationBar: BottomAppBar(
@@ -59,21 +62,13 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      floatingActionButton: SizedBox(
-        height: 64,
-        width: 64,
-        child: FloatingActionButton(
-          tooltip: "Add Note",
-          shape: const CircleBorder(),
-          splashColor: AppColors.lightGrayPercent10,
-          onPressed: () {},
-          backgroundColor: AppColors.primarybase,
-          child: const Icon(
-            Icons.add,
-            size: 32,
-            color: AppColors.white,
-          ),
-        ),
+      floatingActionButton: FloatingActionButton(
+        tooltip: "Add Note",
+        shape: const CircleBorder(),
+        splashColor: AppColors.lightGrayPercent10,
+        onPressed: () {},
+        backgroundColor: AppColors.primarybase,
+        child: const Icon(Icons.add, size: 32, color: AppColors.white),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
@@ -86,11 +81,13 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SvgPicture.asset(icon,
-              width: 32,
-              color: _currentIndex == index
-                  ? AppColors.primarybase
-                  : AppColors.lightGray3),
+          SvgPicture.asset(
+            icon,
+            width: 32,
+            color: _currentIndex == index
+                ? AppColors.primarybase
+                : AppColors.lightGray3,
+          ),
           const Gap(4),
           Text(
             label,
@@ -107,5 +104,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-// Các trang con
