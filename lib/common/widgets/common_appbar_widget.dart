@@ -35,7 +35,8 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
             TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: titleColor,
+              color:
+                  titleColor, // Using the titleColor parameter instead of the conditional operator
             ),
       ),
       leading: leading ??
