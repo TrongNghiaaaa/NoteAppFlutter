@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'package:get/get.dart';
-import 'package:note_app/core/service/client/api_type_enum.dart';
-import 'package:note_app/core/service/client/encode_md5.dart';
+import 'package:note_app/common/utils/api_type_enum.dart';
+import 'package:note_app/common/utils/encode_md5.dart';
 import 'package:note_app/module/locator/api_service_path.dart';
 
 class RegisterService extends GetConnect {

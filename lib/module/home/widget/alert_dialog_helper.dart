@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
-import 'package:note_app/core/constant/app_colors.dart';
-import 'package:note_app/module/home/ui/login_screen.dart';
+import 'package:note_app/config/theme/app_colors.dart';
+import 'package:note_app/module/authencation/screen/login_screen.dart';
 
 Future<void> showAlertDialog(
     BuildContext context,
