@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:note_app/module/home/ui/login_screen.dart';
+import 'package:note_app/module/authencation/screen/login_screen.dart';
 import 'package:note_app/module/home/widget/alert_dialog_helper.dart';
 import 'package:note_app/module/home/widget/snack_bar_widget.dart';
 import 'package:note_app/module/home/widget/tester.dart';

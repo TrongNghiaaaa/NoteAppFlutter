@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
 
-import '../../../core/constant/app_colors.dart';
+import '../../../config/theme/app_colors.dart';
 
 class CommonBadge extends StatelessWidget {
   const CommonBadge(
