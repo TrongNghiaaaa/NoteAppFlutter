@@ -7,7 +7,7 @@ import 'package:note_app/config/theme/app_colors.dart';
 import 'package:note_app/module/finish/finished_screen.dart';
 import 'package:note_app/module/home/screen/home_screen.dart';
 import 'package:note_app/module/search/search_screen.dart';
-import 'package:note_app/module/setting/setting_screen.dart';
+import 'package:note_app/module/setting/screen/setting_screen.dart';
 
 class BottomAppBarWidget extends StatefulWidget {
   const BottomAppBarWidget({super.key});
@@ -24,7 +24,7 @@ class _BottomAppBarState extends State<BottomAppBarWidget> {
     const HomeScreen(),
     const FinishedScreen(),
     const SearchScreen(),
-    const SettingScreen(),
+    const SettingsScreen(),
   ];
 
   void _onItemTapped(int index) {

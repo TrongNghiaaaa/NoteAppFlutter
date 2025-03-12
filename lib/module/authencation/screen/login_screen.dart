@@ -146,11 +146,11 @@ class LoginScreen extends StatelessWidget {
                 height: 50,
                 child: OutlinedButton.icon(
                   onPressed: () async {
-                    UserCredential? userCredential = await signInWithGoogle();
+                    final GoogleAuthController googleAuthController =
+                        Get.put(GoogleAuthController());
+                    await googleAuthController.signInWithGoogle();
 
-                    if (userCredential != null) {
-                      Get.toNamed(Routes.appbar);
-                    }
+                    Get.toNamed(Routes.appbar);
                   },
                   icon: Image.asset(
                     'assets/images/icon_gg.png',

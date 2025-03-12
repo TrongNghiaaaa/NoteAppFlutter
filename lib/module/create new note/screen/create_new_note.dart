@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'dart:async';
 
+import 'package:note_app/common/widgets/common_appbar_widget.dart';
+
 class CreateNewNote extends StatefulWidget {
   static const String routeName = '/createnewnote';
   const CreateNewNote({super.key});
@@ -26,12 +28,10 @@ class _CreateNewNoteState extends State<CreateNewNote> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Ghi chú mới"),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+      appBar: const CommonAppBar(
+        showBackButton: true,
+        title: "Tạo ghi chú mới",
+        backIconColor: Colors.white,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

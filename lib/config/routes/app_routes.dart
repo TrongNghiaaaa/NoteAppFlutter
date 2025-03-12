@@ -31,4 +31,5 @@ class Routes {
 
   static const String noteDetailSetting = '/note-detail-setting';
   static const String forgotPassword = '/forgot-password'; // Quên mật khẩu
+  static const String settingScreen = '/setting-screen';
 }

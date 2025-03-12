@@ -8,6 +8,8 @@ import 'package:note_app/module/authencation/screen/register_screen.dart';
 import 'package:note_app/module/authencation/screen/login_screen.dart';
 import 'package:note_app/module/authencation/screen/forgot_password_screen.dart';
 import 'package:note_app/module/home/model/bottom_appbar_widget.dart';
+import 'package:note_app/module/setting/binding/setting_binding.dart';
+import 'package:note_app/module/setting/screen/setting_screen.dart';
 
 class AppPage {
   static List<GetPage> pages = [
@@ -36,6 +38,11 @@ class AppPage {
     GetPage(
       name: Routes.createNote,
       page: () => const CreateNewNote(),
+    ),
+    GetPage(
+      name: Routes.setting,
+      page: () => const SettingsScreen(),
+      binding: SettingBinding(),
     ),
   ];
 }
