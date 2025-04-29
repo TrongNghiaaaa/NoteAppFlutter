@@ -39,7 +39,7 @@ class CreateNewPasswordScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.black,
+                  color: AppColors.primarybase,
                 ),
               ),
               const Gap(16),

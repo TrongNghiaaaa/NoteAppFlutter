@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
-import 'package:note_app/config/theme/app_colors.dart';
 
 class TextFormFieldWidget extends StatefulWidget {
   final String? hintText;
@@ -43,16 +42,20 @@ class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
     return Padding(
       padding: widget.padding ?? EdgeInsets.zero,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Gap(32),
-          Text(
-            widget.labelText ?? "",
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-          ),
+          if (widget.labelText != null)
+            Text(
+              widget.labelText!,
+              style: theme.textTheme.titleMedium,
+            ),
           const Gap(12),
           TextFormField(
             obscureText: _isObscured,
@@ -63,22 +66,30 @@ class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
             autovalidateMode:
                 widget.autovalidateMode ?? AutovalidateMode.disabled,
             autofocus: widget.autofocus ?? false,
+            style: theme.textTheme.bodyLarge,
             decoration: InputDecoration(
-              hintText: widget.hintText ?? "",
-              hintStyle: const TextStyle(
-                  color: AppColors.textColorBaseGrey,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500),
+              hintText: widget.hintText ?? '',
+              hintStyle: theme.textTheme.bodyMedium?.copyWith(
+                color: cs.onSurface.withOpacity(0.6),
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8.0),
-                borderSide: const BorderSide(color: Colors.grey),
+                borderSide: BorderSide(color: cs.onSurface.withOpacity(0.5)),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8.0),
+                borderSide: BorderSide(color: cs.onSurface.withOpacity(0.5)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8.0),
+                borderSide: BorderSide(color: cs.onPrimary, width: 2),
               ),
               contentPadding: const EdgeInsets.all(16),
               suffixIcon: widget.obscureText
                   ? IconButton(
                       icon: Icon(
                         _isObscured ? Icons.visibility_off : Icons.visibility,
-                        color: Colors.grey,
+                        color: cs.onSurface.withOpacity(0.6),
                       ),
                       onPressed: () {
                         setState(() {

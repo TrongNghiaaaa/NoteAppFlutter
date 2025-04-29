@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:get/get.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:note_app/config/routes/app_routes.dart';
-import 'package:note_app/config/theme/app_colors.dart';
 import 'package:note_app/common/widgets/common_regex.dart';
-import 'package:note_app/module/authencation/controller/login_controller.dart';
 import 'package:note_app/module/authencation/controller/login_phone_number_controller.dart';
 import 'package:note_app/module/home/widget/text_form_field_widget.dart';
+
+import '../controller/login_controller.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final LoginPhoneNumberController loginPhoneNumberController =
-        Get.put(LoginPhoneNumberController());
-    final TextEditingController phoneController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
+    final theme = Theme.of(context);
+    final LoginPhoneNumberController ctrl =
+        Get.find<LoginPhoneNumberController>();
+
+    final phoneController = TextEditingController();
+    final passwordController = TextEditingController();
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -28,49 +29,44 @@ class LoginScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 80),
-              const Text(
+              Text(
                 "Đăng nhập",
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.black,
-                ),
+                style: theme.textTheme.headlineLarge,
               ),
               const Gap(16),
-              const Text(
+              Text(
                 "Ghi lại ý tưởng của bạn",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: AppColors.textColorDarkGrey,
-                ),
+                style: theme.textTheme.bodyMedium,
               ),
               const Gap(12),
               TextFormFieldWidget(
-                hintText: '0xxxxxxxxx',
-                labelText: "Số điện thoại",
-                keyboardType: TextInputType.phone,
-                controller: phoneController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Vui lòng nhập số điện thoại';
-                  }
-                  if (!CommonRegex.phoneRegExp.hasMatch(value)) {
-                    return 'Số điện thoại không hợp lệ';
-                  }
-                  return null;
-                },
-              ),
+                  hintText: '0xxxxxxxxx',
+                  labelText: "Số điện thoại",
+                  keyboardType: TextInputType.phone,
+                  controller: phoneController,
+                  validator: (v) {
+                    if (v == null || v.isEmpty) {
+                      if (v == null || v.isEmpty) {
+                        return 'Vui lòng nhập số điện thoại';
+                      }
+                      if (!CommonRegex.phoneRegExp.hasMatch(v)) {
+                        return 'Số điện thoại không hợp lệ';
+                      }
+                      return null;
+                    }
+                    return null;
+                  }),
               const Gap(12),
               TextFormFieldWidget(
                 hintText: "********",
                 labelText: "Mật khẩu",
                 obscureText: true,
                 controller: passwordController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
+                validator: (v) {
+                  if (v == null || v.isEmpty) {
                     return 'Vui lòng nhập mật khẩu';
                   }
-                  if (!CommonRegex.passRegExp.hasMatch(value)) {
+                  if (!CommonRegex.passRegExp.hasMatch(v)) {
                     return 'Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt';
                   }
                   return null;
@@ -78,16 +74,11 @@ class LoginScreen extends StatelessWidget {
               ),
               const Gap(12),
               TextButton(
-                onPressed: () {
-                  Get.toNamed(Routes.forgotPassword);
-                },
-                child: const Text(
+                onPressed: () => Get.toNamed(Routes.forgotPassword),
+                child: Text(
                   'Quên mật khẩu',
-                  style: TextStyle(
-                    color: AppColors.primarybase,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: theme.textTheme.bodyMedium!
+                      .copyWith(color: theme.colorScheme.onPrimary),
                 ),
               ),
               const Gap(40),
@@ -97,95 +88,83 @@ class LoginScreen extends StatelessWidget {
                 child: Obx(() {
                   return ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.purple,
+                      backgroundColor: theme.colorScheme.onPrimary,
+                      foregroundColor: theme.colorScheme.primary,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0)),
+                        borderRadius: BorderRadius.circular(8.0),
+                        side: BorderSide(
+                          color: theme.colorScheme.onPrimary, // màu viền
+                          width: 1, // độ dày viền
+                        ),
+                      ),
                     ),
-                    onPressed: loginPhoneNumberController.isLoading.value
-                        ? null // Nếu đang loading, disable button
-                        : () {
-                            loginPhoneNumberController.loginAndNavigate(
+                    onPressed: ctrl.isLoading.value
+                        ? null
+                        : () => ctrl.loginAndNavigate(
                               phone: phoneController.text.trim(),
                               password: passwordController.text.trim(),
-                              context: context,
-                            );
-                          },
-                    child: loginPhoneNumberController.isLoading.value
-                        ? const CircularProgressIndicator(color: Colors.white)
-                        : const Text(
+                            ),
+                    child: ctrl.isLoading.value
+                        ? CircularProgressIndicator(
+                            color: theme.colorScheme.onPrimary)
+                        : Text(
                             'Đăng nhập',
-                            style: TextStyle(
-                                color: AppColors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500),
+                            style: theme.textTheme.labelLarge!
+                                .copyWith(color: theme.colorScheme.primary),
                           ),
                   );
                 }),
               ),
               const Gap(16),
-              const Row(
+              Row(
                 children: [
-                  Expanded(
-                    child: Divider(color: Color(0xffEFEEF0)),
-                  ),
+                  Expanded(child: Divider(color: theme.dividerColor)),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text(
-                      'Hoặc',
-                      style: TextStyle(color: AppColors.textColorDarkGrey),
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Text('Hoặc', style: theme.textTheme.bodyMedium),
                   ),
-                  Expanded(
-                    child: Divider(color: Color(0xffEFEEF0)),
-                  ),
+                  Expanded(child: Divider(color: theme.dividerColor)),
                 ],
               ),
               const Gap(23),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: OutlinedButton.icon(
-                  onPressed: () async {
-                    final GoogleAuthController googleAuthController =
-                        Get.put(GoogleAuthController());
-                    await googleAuthController.signInWithGoogle();
-
-                    Get.toNamed(Routes.appbar);
-                  },
-                  icon: Image.asset(
-                    'assets/images/icon_gg.png',
-                    height: 20,
-                    width: 20,
-                  ),
-                  label: const Text('Đăng nhập bằng Google'),
-                  style: OutlinedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+              DecoratedBox(
+                decoration: BoxDecoration(
+                    color: theme.colorScheme.onPrimary,
+                    borderRadius: BorderRadius.circular(8.0),
+                    border: Border.all(color: theme.dividerColor)),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: OutlinedButton.icon(
+                    onPressed: () async {
+                      final googleCtrl = Get.put(GoogleAuthController());
+                      await googleCtrl.signInWithGoogle();
+                      Get.toNamed(Routes.root);
+                    },
+                    icon: Image.asset('assets/images/icon_gg.png',
+                        height: 20, width: 20),
+                    label: Text('Đăng nhập bằng Google',
+                        style: theme.textTheme.labelLarge!
+                            .copyWith(color: theme.colorScheme.primary)),
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: theme.dividerColor),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                     ),
-                    side: const BorderSide(color: Colors.grey),
                   ),
                 ),
               ),
-              const SizedBox(height: 16), // Thay Spacer() bằng SizedBox
+              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    "Chưa có tài khoản?",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                  ),
+                  Text("Chưa có tài khoản?",
+                      style: theme.textTheme.bodyMedium!),
                   TextButton(
-                    onPressed: () {
-                      Get.toNamed(Routes.register);
-                    },
-                    child: const Text(
-                      'Đăng ký ngay',
-                      style: TextStyle(
-                          color: Colors.blue,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
+                      onPressed: () => Get.toNamed(Routes.register),
+                      child: Text('Đăng ký ngay',
+                          style: theme.textTheme.bodyMedium!)),
                 ],
               ),
             ],
