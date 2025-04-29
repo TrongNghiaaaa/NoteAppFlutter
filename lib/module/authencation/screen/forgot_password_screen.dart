@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
-import 'package:note_app/config/theme/app_colors.dart';
+
 import 'package:note_app/module/authencation/screen/login_screen.dart';
 import 'package:note_app/module/home/widget/alert_dialog_helper.dart';
 import 'package:note_app/module/home/widget/snack_bar_widget.dart';
 import 'package:note_app/module/home/widget/text_form_field_widget.dart';
+
+import '../../../common/widgets/common_regex.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
   const ForgotPasswordScreen({super.key});
@@ -12,55 +14,49 @@ class ForgotPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
-    final TextEditingController emailController = TextEditingController();
+    final theme = Theme.of(context);
+
+    final TextEditingController phoneController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.white,
-        iconTheme: const IconThemeData(color: AppColors.primarybase),
+        backgroundColor: theme.scaffoldBackgroundColor,
+        iconTheme: theme.iconTheme,
         title: const Text('Quay lại đăng nhập'),
-        titleTextStyle: const TextStyle(
-            color: AppColors.primarybase,
-            fontSize: 16,
-            fontWeight: FontWeight.w500),
+        titleTextStyle: theme.textTheme.titleMedium,
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(16.0),
           child: Form(
             key: formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Gap(300),
-                const Text(
+                Text(
                   "Quên mật khẩu",
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.black,
-                  ),
+                  style: theme.textTheme.headlineLarge,
                 ),
                 const Gap(16),
-                const Text(
+                Text(
                   "Nhập địa chỉ email của bạn để nhận mã tạo mật khẩu mới",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: AppColors.textColorDarkGrey,
-                  ),
+                  style: theme.textTheme.bodyMedium,
                 ),
                 TextFormFieldWidget(
-                  textInputAction: TextInputAction.next,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  hintText: 'Johndoe@gmail.com',
-                  labelText: "Địa chỉ Email",
-                  keyboardType: TextInputType.emailAddress,
-                  controller: emailController,
-                  validator: (value) {
-                    if (value == null || !value.contains('@')) {
-                      return 'Vui lòng nhập địa chỉ email hợp lệ';
+                  hintText: '0xxxxxxxxx',
+                  labelText: "Số điện thoại",
+                  keyboardType: TextInputType.phone,
+                  controller: phoneController,
+                  validator: (v) {
+                    if (v == null || v.isEmpty) {
+                      return 'Vui lòng nhập số điện thoại';
                     }
+                    if (!CommonRegex.phoneRegExp.hasMatch(v)) {
+                      return 'Số điện thoại không hợp lệ';
+                    }
+
                     return null;
                   },
                 ),
@@ -86,26 +82,25 @@ class ForgotPasswordScreen extends StatelessWidget {
                   },
                   child: Container(
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: AppColors.primarybase),
+                        color: theme.colorScheme.onPrimary,
+                        borderRadius: BorderRadius.circular(100),
+                      ),
                       height: 54,
                       width: double.infinity,
-                      child: const Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Gap(16),
                           Spacer(),
                           Text(
                             "Gửi mã",
-                            style: TextStyle(
-                                color: AppColors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500),
+                            style: theme.textTheme.labelLarge!
+                                .copyWith(color: theme.colorScheme.primary),
                           ),
                           Spacer(),
                           Icon(
                             Icons.arrow_forward_ios,
-                            color: AppColors.white,
+                            color: theme.colorScheme.primary,
                             size: 20,
                           ),
                           Gap(20)

@@ -6,8 +6,6 @@ import 'package:note_app/config/routes/app_routes.dart';
 import 'package:note_app/config/theme/app_colors.dart';
 
 class OnboardingScreen extends StatefulWidget {
-  static const String routeName = '/onboarding';
-
   const OnboardingScreen({super.key});
 
   @override
@@ -16,7 +14,7 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   int _currentIndex = 0;
-  bool _autoPlay = true; // Kiểm soát tự động chuyển slide
+  bool _autoPlay = true;
 
   final List<Map<String, String>> onboardingData = [
     {
@@ -49,6 +47,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               const Gap(128),
               CarouselSlider(
                 items: onboardingData.map((item) {
+                  final textColor = AppColors.white;
                   return Column(
                     children: [
                       Image.asset(
@@ -62,21 +61,28 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         child: Text(
                           onboardingData[_currentIndex]['text']!,
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 20,
-                              color: Colors.white),
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 20,
+                            color: textColor,
+                          ),
                         ),
                       ),
                       const Spacer(),
                       ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.white,
+                          foregroundColor: AppColors.primarybase,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
                         onPressed: () {
                           if (_currentIndex == onboardingData.length - 1) {
                             Get.toNamed(Routes.login);
                           } else {
                             setState(() {
                               _currentIndex++;
-                              onboardingData.length == _currentIndex;
                             });
                           }
                         },
@@ -91,15 +97,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   child: Text(
                                     onboardingData[_currentIndex]
                                         ['buttonText']!,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w500,
+                                      color: AppColors.primarybase,
                                     ),
                                   ),
                                 ),
-                                const Align(
+                                Align(
                                   alignment: Alignment.centerRight,
-                                  child: Icon(Icons.arrow_forward),
+                                  child: Icon(
+                                    Icons.arrow_forward,
+                                    color: AppColors.primarybase,
+                                  ),
                                 ),
                               ],
                             ),
@@ -112,13 +122,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           onPressed: () {
                             setState(() {
                               _currentIndex--;
-                              onboardingData.length - 1 == _currentIndex;
                             });
                           },
-                          child: const Text(
+                          child: Text(
                             'Quay lại',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppColors.white,
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                             ),
@@ -135,8 +144,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     setState(() {
                       _currentIndex = index;
                       if (_currentIndex == onboardingData.length - 1) {
-                        _autoPlay =
-                            false; // Dừng tự động chạy khi đến slide cuối
+                        _autoPlay = false;
                       }
                     });
                   },
@@ -165,7 +173,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       shape: BoxShape.circle,
                       color: _currentIndex == index
                           ? AppColors.indicatorSecondaryBase
-                          : Colors.white,
+                          : AppColors.white,
                     ),
                   ),
                 );

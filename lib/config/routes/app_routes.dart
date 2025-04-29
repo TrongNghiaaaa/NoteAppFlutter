@@ -1,7 +1,7 @@
 class Routes {
   static const String main = '/main';
   static const String home = '/home';
-  static const String appbar = '/appbar';
+  static const String root = '/root';
   static const String login = '/login';
   static const String register = '/register';
   static const String onboarding = '/onboarding';

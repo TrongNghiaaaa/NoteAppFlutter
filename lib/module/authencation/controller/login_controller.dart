@@ -38,8 +38,7 @@ class GoogleAuthController extends GetxController {
       if (currentUser != null && currentUser.photoURL == null) {
         await currentUser.updatePhotoURL(googleUser.photoUrl);
         await currentUser.reload();
-        user.value =
-            FirebaseAuth.instance.currentUser; // Cập nhật trạng thái user
+        user.value = FirebaseAuth.instance.currentUser;
       }
 
       Get.back();

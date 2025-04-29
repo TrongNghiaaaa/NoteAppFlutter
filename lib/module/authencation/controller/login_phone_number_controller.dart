@@ -1,9 +1,10 @@
+// lib/module/authencation/controller/login_phone_number_controller.dart
 import 'dart:developer';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:note_app/config/routes/app_routes.dart';
 import 'package:note_app/core/service/client/login_service.dart';
-import 'package:note_app/module/home/widget/alert_dialog_helper.dart';
+
+import '../../../core/helpers/snackbar_util.dart';
 
 class LoginPhoneNumberController extends GetxController {
   late final LoginService _loginEmailService;
@@ -18,41 +19,30 @@ class LoginPhoneNumberController extends GetxController {
   Future<void> loginAndNavigate({
     required String password,
     required String phone,
-    required BuildContext context,
   }) async {
     isLoading.value = true;
     try {
       final result = await _loginEmailService.login(
-        dt: phone,
-        pa: password,
+        dt: "0387195509",
+        pa: "Nghia1136@",
       );
 
       if (result['error'] == 0) {
-        await showAlertDialog(
-          context,
-          "Thông báo",
-          result['error_text'] ?? "Đăng nhập thành công!",
-          () => Get.back(),
-          () => Get.toNamed(Routes.appbar),
-          "Đến trang chủ",
-          "Đóng",
-        );
+        // Show success snackbar
+        SnackbarUtil.showSuccess("Đăng nhập thành công!");
+
+        Get.toNamed(Routes.root);
       } else {
-        showErrorSnackbar(
-            result['error_text'] ?? "Đăng nhập không thành công!");
+        // Show error snackbar
+        SnackbarUtil.showError(
+          result['error_text'] ?? "Đăng nhập không thành công!",
+        );
       }
     } catch (e) {
       log("Lỗi đăng nhập: $e");
-      showErrorSnackbar("Có lỗi xảy ra, vui lòng thử lại!");
+      SnackbarUtil.showError("Có lỗi xảy ra, vui lòng thử lại!");
     } finally {
       isLoading.value = false;
     }
-  }
-
-  void showErrorSnackbar(String message) {
-    Get.snackbar("Lỗi", message,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM);
   }
 }

@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/config/theme/app_colors.dart';
 
@@ -7,9 +6,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
-
-    // Lấy kích thước màn hình
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
 
@@ -23,30 +19,21 @@ class HomeScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(height: screenHeight * 0.05),
-
-                  // Ảnh minh họa (co giãn theo màn hình)
                   SizedBox(
                     height: screenHeight * 0.3,
                     child: Image.asset("assets/images/image_home.png",
                         fit: BoxFit.contain),
                   ),
-
                   SizedBox(height: screenHeight * 0.03),
-
-                  // Tiêu đề (co giãn theo màn hình)
                   Text(
                     "Bắt đầu hành trình của bạn",
                     style: TextStyle(
-                      fontSize: screenWidth *
-                          0.06, // Điều chỉnh theo chiều rộng màn hình
+                      fontSize: screenWidth * 0.06,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
                   ),
-
                   SizedBox(height: screenHeight * 0.02),
-
-                  // Mô tả (co giãn theo màn hình)
                   Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
@@ -59,13 +46,10 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   SizedBox(height: screenHeight * 0.05),
-
-                  // Biểu tượng chỉ dẫn FloatingActionButton
                   Icon(
                     Icons.arrow_circle_down,
-                    size: screenWidth * 0.12, // Co giãn theo tỷ lệ màn hình
+                    size: screenWidth * 0.12,
                     color: AppColors.primarybase,
                   ),
                 ],

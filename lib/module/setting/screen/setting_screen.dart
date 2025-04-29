@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:note_app/common/widgets/common_appbar_widget.dart';
+import 'package:note_app/config/routes/app_routes.dart';
+import 'package:note_app/config/theme/app_colors.dart';
 import 'package:note_app/config/theme/theme_controller.dart';
 import 'package:note_app/module/authencation/controller/login_controller.dart';
 import 'package:note_app/module/setting/controller/setting_controller.dart';
@@ -75,15 +77,24 @@ class SettingsScreen extends StatelessWidget {
                 onTap: () =>
                     _showNotificationSettings(context, notificationController)),
             _buildSettingsItem(Icons.brightness_6, "Dark Mode",
-                trailingWidget: Obx(() => Switch(
-                      value: themeController.isDarkMode.value,
-                      onChanged: (value) => themeController.toggleTheme(),
-                    ))),
+                trailingWidget: Obx(
+                  () => Switch(
+                    value: Get.find<ThemeController>().isDarkMode.value,
+                    onChanged: (value) {
+                      final themeController = Get.find<ThemeController>();
+                      themeController.toggleTheme();
+                    },
+                  ),
+                )),
             const Divider(thickness: 1),
             ListTile(
               leading: const Icon(Icons.logout, color: Colors.red),
               title: const Text("Log Out", style: TextStyle(color: Colors.red)),
-              onTap: () => googleAuthController.signOut(),
+              onTap: () {
+                googleAuthController
+                    .signOut()
+                    .then((_) => Get.offAllNamed(Routes.login));
+              },
             ),
           ],
         ),
@@ -122,7 +133,7 @@ class SettingsScreen extends StatelessWidget {
               Align(
                 alignment: Alignment.topRight,
                 child: IconButton(
-                  icon: const Icon(Icons.close, color: Colors.grey),
+                  icon: const Icon(Icons.close, color: AppColors.primarybase),
                   onPressed: () => Get.back(),
                 ),
               ),
@@ -130,7 +141,7 @@ class SettingsScreen extends StatelessWidget {
                   "Email Notifications", controller.emailNotifications),
               _buildSwitchTile(
                   "Push Notifications", controller.pushNotifications,
-                  activeColor: Colors.purple),
+                  activeColor: AppColors.primarybase),
             ],
           ),
         );
